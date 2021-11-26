@@ -5,6 +5,8 @@
 
 <p>This component demonstrates fetching data from the server.</p>
 
+<a href="/addSpeaker">Add Speaker</a>
+
 @if (speakers == null) {
 <p><em>Loading...</em></p>
 } else {
@@ -20,13 +22,22 @@
     @foreach (var item in speakers) {
     <tr>
       <td>@item.FirstName @item.LastName</td>
-      <td>Edit</td>
-      <td>Delete</td>
+      <td>
+        <a href="/update/@item.SpeakerId">
+          Edit
+        </a>
+      </td>
+      <td>
+        <a href="/delete/@item.SpeakerId">
+          Delete
+        </a>
+      </td>
     </tr>
     }
   </tbody>
 </table>
 }
+
 
 @code {
   Speaker[] speakers;

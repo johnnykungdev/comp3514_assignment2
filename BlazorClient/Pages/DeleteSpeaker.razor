@@ -1,0 +1,39 @@
+﻿@page "/delete/{SpeakerId}"
+@inject HttpClient httpClient
+@inject NavigationManager NavManager
+
+<h1>Delete Speaker</h1>
+
+<p>Delete Speaker: @SpeakerId</p>
+
+@if (speaker == null) {
+  <div>Getting Information...</div>
+} else {
+  <EditForm Model="@speaker"  OnValidSubmit="@HandleDelete">
+    <div>Are you sure to delete</div>
+    <div>@speaker.FirstName @speaker.LastName ?</div>
+    <button type="submit">Submit</button>
+  </EditForm>
+}
+
+@code {
+  [Parameter]
+  public string SpeakerId { get; set; }
+
+  Speaker speaker;
+  string baseUrl = "https://localhost:6001/";
+
+  protected override async Task OnInitializedAsync() {
+    await load();
+  }
+
+  protected async Task load() {
+    speaker = await httpClient.GetFromJsonAsync<Speaker>($"{baseUrl}api/speakers/{SpeakerId}");
+  }
+
+  private async void HandleDelete() {
+    await httpClient.DeleteAsync($"{baseUrl}api/speakers/{SpeakerId}");
+    StateHasChanged();
+    NavManager.NavigateTo("/speakers");
+  }
+}

@@ -1,0 +1,45 @@
+﻿@page "/addSpeaker"
+@inject HttpClient httpClient
+
+<h1>Add Speaker</h1>
+
+<p>Enter information for new speaker</p>
+
+<EditForm Model="@speaker" OnValidSubmit="@HandleAdd">
+  <DataAnnotationsValidator />
+  <ValidationSummary />
+
+  <InputText placeholder="First Name" id="firstName" @bind-Value="@speaker.FirstName" />
+  <br />
+  <InputText placeholder="Last Name" id="lastName" @bind-Value="@speaker.LastName" />
+  <br />
+  <InputText placeholder="Email" id="school" @bind-Value="@speaker.Email" />
+  <br />
+  <InputText placeholder="Mobile Number" id="school" @bind-Value="@speaker.MobileNumber" />
+  <br />
+  <InputText placeholder="Specialization" id="school" @bind-Value="@speaker.Specialization" />
+  <br />
+  <InputText placeholder="City" id="school" @bind-Value="@speaker.City" />
+  <br />
+  <InputText placeholder="Province" id="school" @bind-Value="@speaker.Province" />
+  <br />
+  <InputText placeholder="Employer" id="school" @bind-Value="@speaker.Employer" />
+  <br />
+  <button type="submit">Submit</button>
+</EditForm>
+
+
+@code {
+    private Speaker speaker = new Speaker();
+
+    string baseUrl = "https://localhost:6001/";
+
+    private async void HandleAdd() {
+        string endpoint = $"{baseUrl}api/speakers";
+
+        speaker.SpeakerId = Guid.NewGuid().ToString();
+
+        await httpClient.PostAsJsonAsync(endpoint, speaker);
+    StateHasChanged(); // causes the page to get automatically refreshed
+  }
+}
